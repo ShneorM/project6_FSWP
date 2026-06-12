@@ -3,6 +3,10 @@ import { useNavigate, Routes, Route, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Todos from './Todos';
 import Posts from './Posts';
+import Albums from './Albums';
+import Photos from './Photos';
+import Settings from './Settings';
+import AdminPanel from './AdminPanel';
 import { DataProvider } from '../context/DataContext';
 
 function Dashboard() {
@@ -37,6 +41,10 @@ function Dashboard() {
               <Route path="/" element={<h3 className="text-center text-muted">ברוך הבא לאזור האישי! בחר מהתפריט למעלה.</h3>} />
               <Route path="todos" element={<Todos user={user} />} />
               <Route path="posts" element={<Posts user={user} />} />
+              <Route path="albums" element={<Albums user={user} />} />
+              <Route path="albums/:albumId/photos" element={<Photos user={user} />} />
+              <Route path="settings" element={<Settings user={user} onUserUpdate={setUser} />} />
+              <Route path="admin" element={<AdminPanel user={user} />} />
             </Routes>
           </div>
         </div>

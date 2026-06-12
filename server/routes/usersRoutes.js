@@ -4,6 +4,7 @@ const usersController = require('../controllers/usersController');
 
 router.get('/', usersController.getAll);
 router.post('/', usersController.create); // Optional admin creation
+router.post('/:id/change-password', usersController.changePassword);
 router.put('/:id', usersController.update);
 router.delete('/:id', usersController.delete);
 

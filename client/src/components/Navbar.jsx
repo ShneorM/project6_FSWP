@@ -8,10 +8,6 @@ function Navbar({ user }) {
     navigate('/login');
   };
 
-  const handleInfo = () => {
-    alert(`פרטי המשתמש:\nשם מלא: ${user.name}\nשם משתמש: ${user.username}\nמזהה מערכת (ID): ${user.id}`);
-  };
-
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
       <div className="container">
@@ -20,10 +16,14 @@ function Navbar({ user }) {
         <div className="navbar-nav me-auto flex-row gap-3">
           <Link className="nav-link text-white" to={`/users/${user.username}/todos`}>משימות</Link>
           <Link className="nav-link text-white" to={`/users/${user.username}/posts`}>פוסטים</Link>
+          <Link className="nav-link text-white" to={`/users/${user.username}/albums`}>אלבומים</Link>
+          {user.is_admin && (
+            <Link className="nav-link text-warning fw-bold" to={`/users/${user.username}/admin`}>🛡️ פאנל מנהל</Link>
+          )}
         </div>
 
         <div className="d-flex gap-2">
-          <button className="btn btn-info text-white fw-bold" onClick={handleInfo}>מידע אישי</button>
+          <Link className="btn btn-info text-white fw-bold" to={`/users/${user.username}/settings`}>הגדרות פרופיל</Link>
           <button className="btn btn-danger fw-bold" onClick={handleLogout}>התנתק</button>
         </div>
       </div>

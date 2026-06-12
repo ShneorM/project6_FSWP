@@ -1,19 +1,20 @@
 const pool = require('../config/db');
 
 class DBService {
-    constructor(tableName) {
+    constructor(tableName, primaryKey = 'id') {
         this.tableName = tableName;
+        this.primaryKey = primaryKey;
     }
 
     async find(conditions = {}) {
         const keys = Object.keys(conditions);
         if (keys.length === 0) {
-            const [rows] = await pool.query(`SELECT * FROM ${this.tableName} ORDER BY id ASC`);
+            const [rows] = await pool.query(`SELECT * FROM ${this.tableName} ORDER BY ${this.primaryKey} ASC`);
             return rows;
         }
         const whereClause = keys.map(k => `${k} = ?`).join(' AND ');
         const values = keys.map(k => conditions[k]);
-        const [rows] = await pool.query(`SELECT * FROM ${this.tableName} WHERE ${whereClause} ORDER BY id ASC`, values);
+        const [rows] = await pool.query(`SELECT * FROM ${this.tableName} WHERE ${whereClause} ORDER BY ${this.primaryKey} ASC`, values);
         return rows;
     }
 
@@ -31,7 +32,7 @@ class DBService {
         const values = keys.map(k => data[k]);
 
         const ownerKeys = Object.keys(ownerCondition);
-        let whereClause = `id = ?`;
+        let whereClause = `${this.primaryKey} = ?`;
         let whereValues = [id];
 
         if (ownerKeys.length > 0) {
@@ -45,7 +46,7 @@ class DBService {
 
     async delete(id, ownerCondition = {}) {
         const ownerKeys = Object.keys(ownerCondition);
-        let whereClause = `id = ?`;
+        let whereClause = `${this.primaryKey} = ?`;
         let whereValues = [id];
 
         if (ownerKeys.length > 0) {

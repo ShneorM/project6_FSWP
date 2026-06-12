@@ -15,6 +15,11 @@ export function DataProvider({ user, children }) {
   const [isPostsLoaded, setIsPostsLoaded] = useState(false);
   const [postsError, setPostsError] = useState('');
 
+  // Albums state
+  const [albums, setAlbums] = useState([]);
+  const [isAlbumsLoaded, setIsAlbumsLoaded] = useState(false);
+  const [albumsError, setAlbumsError] = useState('');
+
   // ========================
   // Todos Actions
   // ========================
@@ -112,10 +117,96 @@ export function DataProvider({ user, children }) {
     }
   };
 
+  // ========================
+  // Albums Actions
+  // ========================
+  const fetchAlbums = useCallback(async () => {
+    if (isAlbumsLoaded || !user) return;
+    try {
+      const response = await api.get(`/albums?userId=${user.id}`);
+      setAlbums(response.data);
+      setIsAlbumsLoaded(true);
+      setAlbumsError('');
+    } catch (err) {
+      setAlbumsError('שגיאה בטעינת אלבומים');
+    }
+  }, [user, isAlbumsLoaded]);
+
+  const addAlbum = async (title) => {
+    try {
+      const response = await api.post('/albums', { user_id: user.id, title });
+      setAlbums((prev) => [...prev, response.data]);
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: 'שגיאה ביצירת אלבום' };
+    }
+  };
+
+  const updateAlbum = async (albumId, title) => {
+    try {
+      await api.put(`/albums/${albumId}`, { user_id: user.id, title });
+      setAlbums((prev) => prev.map(a => a.id === albumId ? { ...a, title } : a));
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: 'שגיאה בעדכון אלבום' };
+    }
+  };
+
+  const deleteAlbum = async (albumId) => {
+    try {
+      await api.delete(`/albums/${albumId}`, { data: { user_id: user.id } });
+      setAlbums((prev) => prev.filter(a => a.id !== albumId));
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: 'שגיאה במחיקת אלבום' };
+    }
+  };
+
+  // ========================
+  // Photos Actions
+  // ========================
+  const fetchPhotos = async (albumId) => {
+    try {
+      const response = await api.get(`/photos?albumId=${albumId}`);
+      return { success: true, data: response.data };
+    } catch (err) {
+      return { success: false, error: 'שגיאה בטעינת תמונות' };
+    }
+  };
+
+  const addPhoto = async (album_id, title, url, thumbnail_url) => {
+    try {
+      const response = await api.post('/photos', { album_id, title, url, thumbnail_url, user_id: user.id });
+      return { success: true, data: response.data };
+    } catch (err) {
+      return { success: false, error: 'שגיאה בהוספת תמונה' };
+    }
+  };
+
+  const updatePhoto = async (photoId, updatedFields) => {
+    try {
+      await api.put(`/photos/${photoId}`, { ...updatedFields, user_id: user.id });
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: 'שגיאה בעדכון תמונה' };
+    }
+  };
+
+  const deletePhoto = async (photoId) => {
+    try {
+      await api.delete(`/photos/${photoId}`, { data: { user_id: user.id } });
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: 'שגיאה במחיקת תמונה' };
+    }
+  };
+
   return (
     <DataContext.Provider value={{
       todos, todosError, fetchTodos, addTodo, updateTodo, deleteTodo,
-      posts, usersMap, postsError, fetchPosts, addPost, updatePost, deletePost
+      posts, usersMap, postsError, fetchPosts, addPost, updatePost, deletePost,
+      albums, albumsError, fetchAlbums, addAlbum, updateAlbum, deleteAlbum,
+      fetchPhotos, addPhoto, updatePhoto, deletePhoto
     }}>
       {children}
     </DataContext.Provider>

@@ -6,6 +6,9 @@ const usersRoutes = require('./routes/usersRoutes');
 const todosRoutes = require('./routes/todosRoutes');
 const postsRoutes = require('./routes/postsRoutes');
 const commentsRoutes = require('./routes/commentsRoutes'); // <--- שורה חדשה
+const albumsRoutes = require('./routes/albumsRoutes');
+const photosRoutes = require('./routes/photosRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 const PORT = 3000;
@@ -22,6 +25,9 @@ app.use('/api/users', usersRoutes);
 app.use('/api/todos', todosRoutes);
 app.use('/api/posts', postsRoutes);
 app.use('/api/comments', commentsRoutes); // <--- שורה חדשה
+app.use('/api/albums', albumsRoutes);
+app.use('/api/photos', photosRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
