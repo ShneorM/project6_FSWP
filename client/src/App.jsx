@@ -1,19 +1,18 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './Login';
-import Register from './Register';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
     <Router>
-      <div style={{ padding: '20px', fontFamily: 'Arial' }}>
+      <div style={{ fontFamily: 'Arial' }}>
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
-          
-          {/* הניתובים כעת מצביעים לקומפוננטות החדשות שיצרנו */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           
-          <Route path="/users/:username/dashboard" element={<h2>האזור האישי (בקרוב נבנה את הדאשבורד!)</h2>} />
+          <Route path="/users/:username/*" element={<Dashboard />} />
         </Routes>
       </div>
     </Router>
