@@ -1,60 +1,43 @@
-import { useState, useEffect } from 'react';
-import api from '../services/api';
+import { useState, useEffect, useContext } from 'react';
 import PostComments from '../components/PostComments';
+import { DataContext } from '../context/DataContext';
 
 function Posts({ user }) {
-  const [posts, setPosts] = useState([]);
-  const [usersMap, setUsersMap] = useState({});
+  const { posts, usersMap, postsError, fetchPosts, addPost, updatePost, deletePost } = useContext(DataContext);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
   
+  const error = localError || postsError;
+
   // States for inline editing
   const [editingPostId, setEditingPostId] = useState(null);
   const [editTitle, setEditTitle] = useState('');
   const [editBody, setEditBody] = useState('');
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const [postsRes, usersRes] = await Promise.all([
-        api.get('/posts'),
-        api.get('/users')
-      ]);
-      
-      const uMap = {};
-      usersRes.data.forEach(u => { uMap[u.id] = u.username; });
-      setUsersMap(uMap);
-      setPosts(postsRes.data);
-    } catch (err) {
-      setError('שגיאה בטעינת נתונים');
-    }
-  };
+    fetchPosts();
+  }, [fetchPosts]);
 
   const handleCreate = async (e) => {
     e.preventDefault();
     if (!title.trim() || !body.trim()) return;
-    try {
-      const response = await api.post('/posts', { user_id: user.id, title, body });
-      setPosts([...posts, response.data]);
+    setLocalError('');
+    
+    const result = await addPost(title, body);
+    if (result.success) {
       setTitle('');
       setBody('');
-    } catch (err) {
-      setError('שגיאה ביצירת פוסט');
+    } else {
+      setLocalError(result.error);
     }
   };
 
   const handleDeletePost = async (postId) => {
     if (!window.confirm('האם אתה בטוח שברצונך למחוק פוסט זה?')) return;
-    try {
-      await api.delete(`/posts/${postId}`, { data: { user_id: user.id } });
-      setPosts(posts.filter(p => p.id !== postId));
-    } catch (err) {
-      alert('שגיאה במחיקת הפוסט');
-    }
+    setLocalError('');
+    const result = await deletePost(postId);
+    if (!result.success) alert(result.error);
   };
 
   const startEditing = (post) => {
@@ -70,12 +53,12 @@ function Posts({ user }) {
   };
 
   const handleSaveEdit = async (postId) => {
-    try {
-      const response = await api.put(`/posts/${postId}`, { user_id: user.id, title: editTitle, body: editBody });
-      setPosts(posts.map(p => p.id === postId ? { ...p, title: editTitle, body: editBody } : p));
+    setLocalError('');
+    const result = await updatePost(postId, editTitle, editBody);
+    if (result.success) {
       setEditingPostId(null);
-    } catch (err) {
-      alert('שגיאה בעדכון הפוסט');
+    } else {
+      alert(result.error);
     }
   };
 

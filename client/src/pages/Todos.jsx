@@ -1,65 +1,48 @@
-import { useState, useEffect } from 'react';
-import api from '../services/api';
+import { useState, useEffect, useContext } from 'react';
 import TodoItem from '../components/TodoItem';
+import { DataContext } from '../context/DataContext';
 
 function Todos({ user }) {
-  const [todos, setTodos] = useState([]);
+  const { todos, todosError, fetchTodos, addTodo, updateTodo, deleteTodo } = useContext(DataContext);
   const [newTitle, setNewTitle] = useState('');
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
+
+  const error = localError || todosError;
 
   useEffect(() => {
     fetchTodos();
-  }, [user]);
-
-  const fetchTodos = async () => {
-    try {
-      const response = await api.get(`/todos?userId=${user.id}`);
-      setTodos(response.data);
-    } catch (err) {
-      setError('שגיאה בטעינת משימות');
-    }
-  };
+  }, [fetchTodos]);
 
   const handleCreate = async (e) => {
     e.preventDefault();
     if (!newTitle.trim()) return;
-    try {
-      const response = await api.post('/todos', { user_id: user.id, title: newTitle });
-      setTodos([...todos, response.data]);
+    setLocalError('');
+    
+    const result = await addTodo(newTitle);
+    if (result.success) {
       setNewTitle('');
-    } catch (err) {
-      setError('שגיאה ביצירת משימה');
+    } else {
+      setLocalError(result.error);
     }
   };
 
   const handleToggle = async (todo) => {
-    try {
-      const updated = { ...todo, completed: !todo.completed };
-      await api.put(`/todos/${todo.id}`, { ...updated, user_id: user.id });
-      setTodos(todos.map(t => t.id === todo.id ? updated : t));
-    } catch (err) {
-      setError('שגיאה בעדכון משימה');
-    }
+    setLocalError('');
+    const result = await updateTodo(todo.id, { completed: !todo.completed });
+    if (!result.success) setLocalError(result.error);
   };
 
   const handleEdit = async (todo, newTitle) => {
-    try {
-      const updated = { ...todo, title: newTitle };
-      await api.put(`/todos/${todo.id}`, { ...updated, user_id: user.id });
-      setTodos(todos.map(t => t.id === todo.id ? updated : t));
-    } catch (err) {
-      setError('שגיאה בעדכון משימה');
-    }
+    setLocalError('');
+    const result = await updateTodo(todo.id, { title: newTitle });
+    if (!result.success) setLocalError(result.error);
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm('למחוק את המשימה?')) return;
-    try {
-      await api.delete(`/todos/${id}`, { data: { user_id: user.id } });
-      setTodos(todos.filter(t => t.id !== id));
-    } catch (err) {
-      setError('שגיאה במחיקת משימה');
-    }
+    setLocalError('');
+    const result = await deleteTodo(id);
+    if (!result.success) setLocalError(result.error);
   };
 
   return (

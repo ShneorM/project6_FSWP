@@ -3,6 +3,7 @@ import { useNavigate, Routes, Route, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Todos from './Todos';
 import Posts from './Posts';
+import { DataProvider } from '../context/DataContext';
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -26,19 +27,21 @@ function Dashboard() {
   if (!user) return <div className="container mt-5 text-center"><div className="spinner-border text-primary"></div></div>;
 
   return (
-    <div>
-      <Navbar user={user} />
+    <DataProvider user={user}>
+      <div>
+        <Navbar user={user} />
 
-      <div className="container mt-4">
-        <div className="bg-white p-4 rounded shadow-sm">
-          <Routes>
-            <Route path="/" element={<h3 className="text-center text-muted">ברוך הבא לאזור האישי! בחר מהתפריט למעלה.</h3>} />
-            <Route path="todos" element={<Todos user={user} />} />
-            <Route path="posts" element={<Posts user={user} />} />
-          </Routes>
+        <div className="container mt-4">
+          <div className="bg-white p-4 rounded shadow-sm">
+            <Routes>
+              <Route path="/" element={<h3 className="text-center text-muted">ברוך הבא לאזור האישי! בחר מהתפריט למעלה.</h3>} />
+              <Route path="todos" element={<Todos user={user} />} />
+              <Route path="posts" element={<Posts user={user} />} />
+            </Routes>
+          </div>
         </div>
       </div>
-    </div>
+    </DataProvider>
   );
 }
 
