@@ -2,7 +2,7 @@ class BaseController {
     constructor(service, resourceName, ownerField = null, queryParamMapping = null) {
         this.service = service;
         this.resourceName = resourceName;
-        this.ownerField = ownerField; // e.g. 'user_id'
+        this.ownerField = ownerField; 
         this.queryParamMapping = queryParamMapping; // maps req.query.userId to db user_id
         
         // Bind methods to preserve 'this' context in Express routes
