@@ -30,7 +30,7 @@ export function DataProvider({ user, children }) {
       setTodos(response.data);
       setIsTodosLoaded(true);
       setTodosError('');
-    } catch (err) {
+    } catch {
       setTodosError('שגיאה בטעינת משימות');
     }
   }, [user, isTodosLoaded]);
@@ -40,7 +40,7 @@ export function DataProvider({ user, children }) {
       const response = await api.post('/todos', { user_id: user.id, title });
       setTodos((prev) => [...prev, response.data]);
       return { success: true };
-    } catch (err) {
+    } catch {
       return { success: false, error: 'שגיאה ביצירת משימה' };
     }
   };
@@ -50,7 +50,7 @@ export function DataProvider({ user, children }) {
       await api.put(`/todos/${todoId}`, { ...updatedFields, user_id: user.id });
       setTodos((prev) => prev.map(t => t.id === todoId ? { ...t, ...updatedFields } : t));
       return { success: true };
-    } catch (err) {
+    } catch {
       return { success: false, error: 'שגיאה בעדכון משימה' };
     }
   };
@@ -60,7 +60,7 @@ export function DataProvider({ user, children }) {
       await api.delete(`/todos/${todoId}`, { data: { user_id: user.id } });
       setTodos((prev) => prev.filter(t => t.id !== todoId));
       return { success: true };
-    } catch (err) {
+    } catch {
       return { success: false, error: 'שגיאה במחיקת משימה' };
     }
   };
@@ -82,7 +82,7 @@ export function DataProvider({ user, children }) {
       setPosts(postsRes.data);
       setIsPostsLoaded(true);
       setPostsError('');
-    } catch (err) {
+    } catch {
       setPostsError('שגיאה בטעינת נתונים');
     }
   }, [isPostsLoaded]);
@@ -92,7 +92,7 @@ export function DataProvider({ user, children }) {
       const response = await api.post('/posts', { user_id: user.id, title, body });
       setPosts((prev) => [...prev, response.data]);
       return { success: true };
-    } catch (err) {
+    } catch {
       return { success: false, error: 'שגיאה ביצירת פוסט' };
     }
   };
@@ -102,7 +102,7 @@ export function DataProvider({ user, children }) {
       await api.put(`/posts/${postId}`, { user_id: user.id, title, body });
       setPosts((prev) => prev.map(p => p.id === postId ? { ...p, title, body } : p));
       return { success: true };
-    } catch (err) {
+    } catch {
       return { success: false, error: 'שגיאה בעדכון הפוסט' };
     }
   };
@@ -112,7 +112,7 @@ export function DataProvider({ user, children }) {
       await api.delete(`/posts/${postId}`, { data: { user_id: user.id } });
       setPosts((prev) => prev.filter(p => p.id !== postId));
       return { success: true };
-    } catch (err) {
+    } catch {
       return { success: false, error: 'שגיאה במחיקת הפוסט' };
     }
   };
@@ -127,7 +127,7 @@ export function DataProvider({ user, children }) {
       setAlbums(response.data);
       setIsAlbumsLoaded(true);
       setAlbumsError('');
-    } catch (err) {
+    } catch {
       setAlbumsError('שגיאה בטעינת אלבומים');
     }
   }, [user, isAlbumsLoaded]);
@@ -137,7 +137,7 @@ export function DataProvider({ user, children }) {
       const response = await api.post('/albums', { user_id: user.id, title });
       setAlbums((prev) => [...prev, response.data]);
       return { success: true };
-    } catch (err) {
+    } catch {
       return { success: false, error: 'שגיאה ביצירת אלבום' };
     }
   };
@@ -147,7 +147,7 @@ export function DataProvider({ user, children }) {
       await api.put(`/albums/${albumId}`, { user_id: user.id, title });
       setAlbums((prev) => prev.map(a => a.id === albumId ? { ...a, title } : a));
       return { success: true };
-    } catch (err) {
+    } catch {
       return { success: false, error: 'שגיאה בעדכון אלבום' };
     }
   };
@@ -157,7 +157,7 @@ export function DataProvider({ user, children }) {
       await api.delete(`/albums/${albumId}`, { data: { user_id: user.id } });
       setAlbums((prev) => prev.filter(a => a.id !== albumId));
       return { success: true };
-    } catch (err) {
+    } catch {
       return { success: false, error: 'שגיאה במחיקת אלבום' };
     }
   };
@@ -169,7 +169,7 @@ export function DataProvider({ user, children }) {
     try {
       const response = await api.get(`/photos?albumId=${albumId}`);
       return { success: true, data: response.data };
-    } catch (err) {
+    } catch {
       return { success: false, error: 'שגיאה בטעינת תמונות' };
     }
   };
@@ -178,7 +178,7 @@ export function DataProvider({ user, children }) {
     try {
       const response = await api.post('/photos', { album_id, title, url, thumbnail_url, user_id: user.id });
       return { success: true, data: response.data };
-    } catch (err) {
+    } catch {
       return { success: false, error: 'שגיאה בהוספת תמונה' };
     }
   };
@@ -187,7 +187,7 @@ export function DataProvider({ user, children }) {
     try {
       await api.put(`/photos/${photoId}`, { ...updatedFields, user_id: user.id });
       return { success: true };
-    } catch (err) {
+    } catch {
       return { success: false, error: 'שגיאה בעדכון תמונה' };
     }
   };
@@ -196,7 +196,7 @@ export function DataProvider({ user, children }) {
     try {
       await api.delete(`/photos/${photoId}`, { data: { user_id: user.id } });
       return { success: true };
-    } catch (err) {
+    } catch {
       return { success: false, error: 'שגיאה במחיקת תמונה' };
     }
   };

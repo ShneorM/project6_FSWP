@@ -21,8 +21,8 @@ function TodoItem({ todo, onToggle, onDelete, onEdit }) {
             onChange={(e) => setEditTitle(e.target.value)} 
             autoFocus
           />
-          <button className="btn btn-sm btn-success" onClick={handleSave}>✓</button>
-          <button className="btn btn-sm btn-secondary" onClick={() => { setIsEditing(false); setEditTitle(todo.title); }}>✕</button>
+          <button className="btn btn-sm btn-success" onClick={handleSave}>Save</button>
+          <button className="btn btn-sm btn-secondary" onClick={() => { setIsEditing(false); setEditTitle(todo.title); }}>Cancel</button>
         </div>
       ) : (
         <div className="d-flex align-items-center flex-grow-1">
@@ -49,8 +49,8 @@ function TodoItem({ todo, onToggle, onDelete, onEdit }) {
       
       {!isEditing && (
         <div className="d-flex gap-2 ms-2 flex-shrink-0">
-          <button className="btn btn-sm btn-outline-secondary" onClick={() => setIsEditing(true)} title="ערוך">✏️</button>
-          <button className="btn btn-sm btn-outline-danger" onClick={() => onDelete(todo.id)} title="מחק">🗑️</button>
+          <button className="btn btn-sm btn-outline-secondary" onClick={() => setIsEditing(true)} title="Edit">Edit</button>
+          <button className="btn btn-sm btn-outline-danger" onClick={() => onDelete(todo.id)} title="Delete">Delete</button>
         </div>
       )}
     </div>

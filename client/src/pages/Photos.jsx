@@ -102,13 +102,13 @@ function Photos({ user }) {
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h3 className="text-success mb-0">🖼️ תמונות באלבום #{albumId}</h3>
+        <h3 className="text-success mb-0">Photos in Album #{albumId}</h3>
         <div className="d-flex gap-2">
           <button className="btn btn-outline-primary btn-sm fw-bold" onClick={() => setShowForm(!showForm)}>
-            {showForm ? 'ביטול' : '➕ הוסף תמונה'}
+            {showForm ? 'ביטול' : 'Add Photo'}
           </button>
           <button className="btn btn-outline-secondary btn-sm fw-bold" onClick={() => navigate(`/users/${user.username}/albums`)}>
-            🔙 חזרה לאלבומים
+            Back to Albums
           </button>
         </div>
       </div>
@@ -197,8 +197,8 @@ function Photos({ user }) {
                       <>
                         <p className="card-text small text-truncate mb-1 fw-bold" title={photo.title}>{photo.title}</p>
                         <div className="d-flex justify-content-end gap-1 mt-auto">
-                          <button className="btn btn-sm btn-link text-secondary p-0" title="ערוך" onClick={() => startEditing(photo)}>✏️</button>
-                          <button className="btn btn-sm btn-link text-danger p-0" title="מחק" onClick={() => handleDelete(photo.id)}>🗑️</button>
+                          <button className="btn btn-sm btn-link text-secondary p-0 text-decoration-none" title="Edit" onClick={() => startEditing(photo)}>Edit</button>
+                          <button className="btn btn-sm btn-link text-danger p-0 text-decoration-none" title="Delete" onClick={() => handleDelete(photo.id)}>Delete</button>
                         </div>
                       </>
                     )}

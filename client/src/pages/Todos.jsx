@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import TodoItem from '../components/TodoItem';
 import { DataContext } from '../context/DataContext';
 
-function Todos({ user }) {
+function Todos() {
   const { todos, todosError, fetchTodos, addTodo, updateTodo, deleteTodo } = useContext(DataContext);
   const [newTitle, setNewTitle] = useState('');
   const [localError, setLocalError] = useState('');

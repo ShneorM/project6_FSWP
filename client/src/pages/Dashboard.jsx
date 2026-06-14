@@ -39,7 +39,7 @@ function Dashboard() {
           <div className="bg-white p-4 rounded shadow-sm">
             <Routes>
               <Route path="/" element={<h3 className="text-center text-muted">ברוך הבא לאזור האישי! בחר מהתפריט למעלה.</h3>} />
-              <Route path="todos" element={<Todos user={user} />} />
+              <Route path="todos" element={<Todos />} />
               <Route path="posts" element={<Posts user={user} />} />
               <Route path="albums" element={<Albums user={user} />} />
               <Route path="albums/:albumId/photos" element={<Photos user={user} />} />

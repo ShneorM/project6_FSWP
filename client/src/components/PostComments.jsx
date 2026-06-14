@@ -17,8 +17,8 @@ function PostComments({ postId, user }) {
     try {
       const response = await api.get(`/comments?postId=${postId}`);
       setComments(response.data);
-    } catch (err) {
-      console.error('Error fetching comments:', err);
+    } catch {
+      console.error('Error fetching comments');
     }
   };
 
@@ -43,8 +43,8 @@ function PostComments({ postId, user }) {
       const response = await api.post('/comments', newCommentData);
       setComments([...comments, response.data]);
       setBody('');
-    } catch (err) {
-      console.error('Error adding comment:', err);
+    } catch {
+      console.error('Error adding comment');
     } finally {
       setLoading(false);
     }
@@ -55,7 +55,7 @@ function PostComments({ postId, user }) {
     try {
       await api.delete(`/comments/${commentId}`, { data: { email: userEmail } });
       setComments(comments.filter(c => c.id !== commentId));
-    } catch (err) {
+    } catch {
       alert('שגיאה במחיקת התגובה');
     }
   };
@@ -76,7 +76,7 @@ function PostComments({ postId, user }) {
       await api.put(`/comments/${commentId}`, { email: userEmail, body: editBody });
       setComments(comments.map(c => c.id === commentId ? { ...c, body: editBody } : c));
       setEditingCommentId(null);
-    } catch (err) {
+    } catch {
       alert('שגיאה בעדכון התגובה');
     }
   };
@@ -108,11 +108,11 @@ function PostComments({ postId, user }) {
                       <strong className="small text-primary">{comment.name}</strong>
                       {isOwner && !isEditing && (
                         <div>
-                          <button className="btn btn-sm btn-link text-secondary p-0 me-2" title="ערוך תגובה" onClick={() => startEditing(comment)}>
-                            ✏️
+                          <button className="btn btn-sm btn-link text-secondary p-0 me-2 text-decoration-none" title="Edit" onClick={() => startEditing(comment)}>
+                            Edit
                           </button>
-                          <button className="btn btn-sm btn-link text-danger p-0" title="מחק תגובה" onClick={() => handleDeleteComment(comment.id)}>
-                            🗑️
+                          <button className="btn btn-sm btn-link text-danger p-0 text-decoration-none" title="Delete" onClick={() => handleDeleteComment(comment.id)}>
+                            Delete
                           </button>
                         </div>
                       )}
@@ -127,8 +127,8 @@ function PostComments({ postId, user }) {
                           onChange={(e) => setEditBody(e.target.value)} 
                           autoFocus
                         />
-                        <button className="btn btn-sm btn-success px-2" onClick={() => handleSaveEdit(comment.id)}>✓</button>
-                        <button className="btn btn-sm btn-secondary px-2" onClick={cancelEditing}>✕</button>
+                        <button className="btn btn-sm btn-success px-2" onClick={() => handleSaveEdit(comment.id)}>Save</button>
+                        <button className="btn btn-sm btn-secondary px-2" onClick={cancelEditing}>Cancel</button>
                       </div>
                     ) : (
                       <p className="mb-0 small">{comment.body}</p>

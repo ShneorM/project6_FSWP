@@ -63,7 +63,7 @@ function Albums({ user }) {
 
   return (
     <div>
-      <h3 className="text-center text-success mb-4">📷 האלבומים שלי</h3>
+      <h3 className="text-center text-success mb-4">My Albums</h3>
       {error && <div className="alert alert-danger">{error}</div>}
 
       <form onSubmit={handleCreate} className="d-flex mb-4 gap-2">
@@ -103,13 +103,13 @@ function Albums({ user }) {
                     ) : (
                       <>
                         <div className="d-flex justify-content-between align-items-start mb-2">
-                          <h5 className="card-title text-primary mb-0">📁 {album.title}</h5>
+                          <h5 className="card-title text-primary mb-0">Album: {album.title}</h5>
                           <div className="d-flex gap-1">
-                            <button className="btn btn-sm btn-link text-secondary p-0" title="ערוך" onClick={() => startEditing(album)}>
-                              ✏️
+                            <button className="btn btn-sm btn-link text-secondary p-0 text-decoration-none" title="Edit" onClick={() => startEditing(album)}>
+                              Edit
                             </button>
-                            <button className="btn btn-sm btn-link text-danger p-0" title="מחק" onClick={() => handleDelete(album.id)}>
-                              🗑️
+                            <button className="btn btn-sm btn-link text-danger p-0 text-decoration-none" title="Delete" onClick={() => handleDelete(album.id)}>
+                              Delete
                             </button>
                           </div>
                         </div>
@@ -122,7 +122,7 @@ function Albums({ user }) {
                         className="btn btn-outline-primary btn-sm mt-auto fw-bold"
                         onClick={() => handleOpenPhotos(album.id)}
                       >
-                        📸 צפה בתמונות
+                        View Photos
                       </button>
                     )}
                   </div>

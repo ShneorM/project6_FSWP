@@ -107,11 +107,11 @@ function Posts({ user }) {
                     
                     {isOwner && !isEditing && (
                       <div className="position-absolute top-0 end-0 p-2">
-                        <button className="btn btn-sm btn-link text-secondary p-0 me-2" title="ערוך" onClick={() => startEditing(post)}>
-                          ✏️
+                        <button className="btn btn-sm btn-link text-secondary p-0 me-2 text-decoration-none" title="Edit" onClick={() => startEditing(post)}>
+                          Edit
                         </button>
-                        <button className="btn btn-sm btn-link text-danger p-0" title="מחק" onClick={() => handleDeletePost(post.id)}>
-                          🗑️
+                        <button className="btn btn-sm btn-link text-danger p-0 text-decoration-none" title="Delete" onClick={() => handleDeletePost(post.id)}>
+                          Delete
                         </button>
                       </div>
                     )}

@@ -28,7 +28,7 @@ function Settings({ user, onUserUpdate }) {
     }
 
     try {
-      const response = await api.put(`/users/${user.id}`, { name: name.trim(), user_id: user.id });
+      await api.put(`/users/${user.id}`, { name: name.trim(), user_id: user.id });
       // Update localStorage with the new name
       const updatedUser = { ...user, name: name.trim() };
       localStorage.setItem('user', JSON.stringify(updatedUser));
